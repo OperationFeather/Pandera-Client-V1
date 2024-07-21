@@ -689,7 +689,7 @@ end
 
 -- game specific functions
 function EspInterface.getWeapon(player)
-	return workspace[player.Character].EquippedTool.Value or "None"
+	return tostring(workspace[player.Character].EquippedTool.Value) or "None"
 end
 
 function EspInterface.isFriendly(player)
