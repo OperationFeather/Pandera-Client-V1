@@ -689,7 +689,8 @@ end
 
 -- game specific functions
 function EspInterface.getWeapon(player)
-	return tostring(workspace[player.Character].EquippedTool.Value) or "None"
+	local equippedTool = workspace[player.Character]:FindFirstChild("EquippedTool")
+	return tostring(equippedTool and equippedTool.Value or "None")
 end
 
 function EspInterface.isFriendly(player)
