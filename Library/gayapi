@@ -1,0 +1,48 @@
+-- wanna skid? skid = touched
+-- API ModuleScript
+
+local API = {}
+local originalTextures = {}
+
+function API:SwapTextures(gunName, textureTable)
+    local viewModel = game:GetService("ReplicatedStorage"):WaitForChild("Viewmodels"):WaitForChild(gunName)
+    
+    if not originalTextures[gunName] then
+        originalTextures[gunName] = {}
+    end
+    
+    for partName, textureId in pairs(textureTable) do
+        local part = viewModel:FindFirstChild(partName)
+        if part then
+            if not originalTextures[gunName][partName] then
+                originalTextures[gunName][partName] = part.TextureID
+            end
+            part.TextureID = textureId
+        else
+            warn("Part " .. partName .. " not found in " .. gunName)
+        end
+    end
+end
+
+function API:RevertTextureSwap(gunName)
+    local viewModel = game:GetService("ReplicatedStorage"):WaitForChild("Viewmodels"):WaitForChild(gunName)
+    
+    if not originalTextures[gunName] then
+        warn("No original textures stored for " .. gunName)
+        return
+    end
+    
+    for partName, originalTextureId in pairs(originalTextures[gunName]) do
+        local part = viewModel:FindFirstChild(partName)
+        if part then
+            part.TextureID = originalTextureId
+        else
+            warn("Part " .. partName .. " not found in " .. gunName)
+        end
+    end
+    
+    -- Clear after revert
+    originalTextures[gunName] = nil
+end
+
+return API
