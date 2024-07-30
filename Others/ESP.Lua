@@ -689,9 +689,9 @@ end
 
 -- game specific functions
 function EspInterface.getWeapon(player)
-    local character = player.Name
+    local character = workspace:FindFirstChild(player.Name)
     if character then
-        local equippedTool = workspace[character]:FindFirstChild("EquippedTool")
+        local equippedTool = character:FindFirstChild("EquippedTool")
         print(tostring(equippedTool))
         if equippedTool == nil then
             return "None"
@@ -702,6 +702,7 @@ function EspInterface.getWeapon(player)
         return "Character not found"
     end
 end
+
 
 function EspInterface.isFriendly(player)
 	return player.Team and player.Team == localPlayer.Team;
