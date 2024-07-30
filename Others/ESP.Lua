@@ -692,7 +692,7 @@ function EspInterface.getWeapon(player)
     local character = workspace:FindFirstChild(player.Name)
     if character then
         local equippedTool = character:FindFirstChild("EquippedTool")
-        print(tostring(equippedTool))
+       -- print(tostring(equippedTool))
         if equippedTool == nil then
             return "None"
         else
