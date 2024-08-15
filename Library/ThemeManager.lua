@@ -1,8 +1,8 @@
-local httpService = game:GetService("HttpService")
+local httpService = game:GetService('HttpService')
 local ThemeManager = {} do
 	ThemeManager.Folder = 'LinoriaLibSettings'
 	-- if not isfolder(ThemeManager.Folder) then makefolder(ThemeManager.Folder) end
-	ThemeManager.RainbowEffectEnabled = false
+
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
 		['Default'] 		= { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1c1c1c","AccentColor":"0055ff","BackgroundColor":"141414","OutlineColor":"323232"}') },
@@ -74,20 +74,6 @@ local ThemeManager = {} do
 	function ThemeManager:SaveDefault(theme)
 		writefile(self.Folder .. '/themes/default.txt', theme)
 	end
-	function ThemeManager:StartRainbowEffect()
-        if self.RainbowEffectEnabled then
-            spawn(function()
-                while self.RainbowEffectEnabled do
-                    local hue = tick() % 5 / 5 -- cycling hue
-                    local color = Color3.fromHSV(hue, 1, 1)
-                    self.Library.AccentColor = color
-                    self.Library.AccentColorDark = self.Library:GetDarkerColor(color)
-                    self.Library:UpdateColorsUsingRegistry()
-                    wait(0.1)
-                end
-            end)
-        end
-    end
 
 	function ThemeManager:CreateThemeManager(groupbox)
 		groupbox:AddLabel('Background color'):AddColorPicker('BackgroundColor', { Default = self.Library.BackgroundColor });
@@ -95,12 +81,6 @@ local ThemeManager = {} do
 		groupbox:AddLabel('Accent color'):AddColorPicker('AccentColor', { Default = self.Library.AccentColor });
 		groupbox:AddLabel('Outline color'):AddColorPicker('OutlineColor', { Default = self.Library.OutlineColor });
 		groupbox:AddLabel('Font color')	:AddColorPicker('FontColor', { Default = self.Library.FontColor });
-		groupbox:AddDropdown('ThemeManager_AccentEffect', { 
-            Text = 'Accent Effect', 
-            Values = { 'Default', 'Rainbow' }, 
-            Default = 1 
-        })
-
 
 		local ThemesArray = {}
 		for Name, Theme in next, self.BuiltInThemes do
@@ -146,15 +126,7 @@ local ThemeManager = {} do
 				self.Library:Notify(string.format('Set default theme to %q', Options.ThemeManager_CustomThemeList.Value))
 			end
 		end)
-        Options.ThemeManager_AccentEffect:OnChanged(function()
-            if Options.ThemeManager_AccentEffect.Value == 'Rainbow' then
-                self.RainbowEffectEnabled = true
-                self:StartRainbowEffect()
-            else
-                self.RainbowEffectEnabled = false
-                self:ApplyTheme(Options.ThemeManager_ThemeList.Value) 
-            end
-        end)
+
 		ThemeManager:LoadDefault()
 
 		local function UpdateTheme()
@@ -274,3 +246,5 @@ local ThemeManager = {} do
 
 	ThemeManager:BuildFolderTree()
 end
+
+return ThemeManager
